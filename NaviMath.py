@@ -3,8 +3,6 @@ import DataUtility as dat
 import OriMath as ori
 from OriMath import radToDeg, degToRad, clamp
 
-# TEST 2
-
 
 def schedule(startTime, endTime, Time):
     if startTime <= Time <= endTime:
