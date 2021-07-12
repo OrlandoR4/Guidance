@@ -1,6 +1,5 @@
 import math
 import matplotlib.pyplot as plt
-from matplotlib.animation import FuncAnimation
 
 import OriMath as ori
 from OriMath import radToDeg, degToRad, clamp
@@ -25,6 +24,7 @@ Rocket.Floor = True
 Rocket.setFromEulerAngles(0, 10, -5, "deg")
 Rocket.createStandardDataSet("Rocket Data")
 
+# DATA TESTING
 RocketApogee = 0.0 # Apogee for graph
 posLim = 0.0 # Limit for position graph
 

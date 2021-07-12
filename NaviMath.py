@@ -89,7 +89,6 @@ class DOF6:
         self.Acceleration = ori.Vector3(0, 0, 0)
         self.AngularAcceleration = ori.Vector3(0, 0, 0)
 
-
     def createStandardDataSet(self, sName): # Creates a standard data set to append data to
         self.Dataset.Name = sName
         self.Dataset.createData("Time")
