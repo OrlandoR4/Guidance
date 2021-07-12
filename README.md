@@ -3,4 +3,7 @@ program is to be modular and intuitive enough for anyone to modify and simulate 
 
 Guidance also features a data logging and data parsing module for processing and creating flight data files for analysis and visualization within Guidance or external programs.
 
-^^^^^ I don't assume any responsibility for anything flown or tested using this program, use and modify at your own risk. ^^^^^
+As of now, Guidance requires Matplotlib for data visualization.
+
+I don't assume any responsibility for anything flown or tested using this program, 
+                    use and modify at your own risk.
