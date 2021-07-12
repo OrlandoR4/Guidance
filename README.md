@@ -5,5 +5,4 @@ Guidance also features a data logging and data parsing module for processing and
 
 As of now, Guidance requires Matplotlib for data visualization.
 
-I don't assume any responsibility for anything flown or tested using this program, 
-                    use and modify at your own risk.
+I don't assume any responsibility for anything flown or tested using this program, use and modify at your own risk.
