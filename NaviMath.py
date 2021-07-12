@@ -55,7 +55,7 @@ class DOF6:
         self.Velocity += self.GlobalAcceleration * dt
         self.Position += self.Velocity * dt
 
-        if self.Position.x <= 0.0:
+        if self.Position.x <= 0.0 and self.Floor:
             self.Velocity.x = 0.0
             self.Velocity.y = 0.0
             self.Velocity.z = 0.0
