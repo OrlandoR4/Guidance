@@ -1,3 +1,5 @@
+(THIS IS NOT A STABLE RELEASE, STILL IN DEVELOPMENT)
+
 Guidance is an experimental set of tools for physics simulations involving guidance, navigation, and control of rockets and rocket-related bodies. The main objective for this
 program is to be modular and intuitive enough for anyone to modify and simulate their own systems in.
 
