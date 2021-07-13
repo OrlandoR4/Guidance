@@ -27,6 +27,16 @@ def degToRad(num):
     return num
 
 
+def rotate(x, y, theta):
+    cs = math.cos(theta)
+    sn = math.sin(theta)
+
+    rotated_x = x * sn + y * cs
+    rotated_y = x * cs - y * sn
+
+    return Vector3(rotated_x, rotated_y, 0)
+
+
 class Vector3:
     x = 0.0
     y = 0.0

@@ -2,7 +2,7 @@ import math
 import matplotlib.pyplot as plt
 
 import OriMath as ori
-from OriMath import radToDeg, degToRad, clamp
+from OriMath import radToDeg, degToRad, clamp, rotate
 
 import NaviMath as nav
 from NaviMath import schedule
@@ -21,12 +21,12 @@ Rocket.Mass = 0.6
 Rocket.MMOI = ori.Vector3(0.005, 0.0348, 0.0348)
 Rocket.Gravity = ori.Vector3(Sim.Gravity, 0, 0)
 Rocket.Floor = True
-Rocket.setFromEulerAngles(0, 0, 0, "deg")
+Rocket.setFromEulerAngles(0, 5.0, 5.0, "deg")
 Rocket.createStandardDataSet("Rocket Data")
 
 # DATA TESTING
-RocketApogee = 0.0 # Apogee for graph
-posLim = 0.0 # Limit for position graph
+RocketApogee = 1.0 # Apogee for graph
+posLim = 1.0 # Limit for position graph
 
 # ------------------------- ORIENTATION PID -------------------------
 YPID = nav.PID(0.25, 0.0, 0.1)
@@ -64,15 +64,16 @@ while Sim.iterations <= Sim.Length/Sim.timeStep:
     YPID.PID(radToDeg(Rocket.EulerAngles.y), Sim.timeStep)
     ZPID.PID(radToDeg(Rocket.EulerAngles.z), Sim.timeStep)
 
-    YTVC.actuate(YPID.output, Sim.timeStep)
-    ZTVC.actuate(ZPID.output, Sim.timeStep)
+    RotatedTVC = rotate(ZPID.output, YPID.output, Rocket.EulerAngles.x)
+
+    YTVC.actuate(RotatedTVC.x, Sim.timeStep)
+    ZTVC.actuate(RotatedTVC.y, Sim.timeStep)
 
     # ------------- PHYSICS --------------
     if not schedule(0, 8, Sim.Time):
         MotorThrust = 0.0
 
     # Rocket.addTorque(0, YTVC.getTorque(MotorThrust), ZTVC.getTorque(MotorThrust))
-    # Rocket.addTorque(0, 0, 0)
     Rocket.addForce(MotorThrust, 0, 0)
 
     # ------------ UPDATE BODIES ----------
