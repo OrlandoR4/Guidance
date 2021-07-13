@@ -1,9 +1,9 @@
 
 
 class Data:
-    Name = ""
-    Index = 0
-    Datas = []
+    Name = "" # Name of the data being stored
+    Index = 0 # Index of the data, used by the DataRecord class
+    Datas = [] # List to store the data
 
     def __init__(self, sName, sIndex, sDatas):
         self.Name = sName
@@ -11,40 +11,40 @@ class Data:
         self.Datas = sDatas
 
 
-class DataRecord:
-    Name = ""
-    DataObjects = [Data]
-    Indexes = 0
+class DataRecord: # Stores multiple data objects, a dataset
+    Name = "" # Name of the dataset
+    DataObjects = [Data] # List of data objects
+    Indexes = 0 # Number of data objects that the datarecord stores
 
     def __init__(self, sName):
         self.name = sName
         self.DataObjects = []
 
-    def createData(self, Name):
+    def createData(self, Name): # Creates a data object to store data to
         self.DataObjects.append(Data(Name, self.Indexes, []))
         self.Indexes += 1
 
-    def addData(self, NameToFind, data):
+    def addData(self, NameToFind, data): # Adds data to a data object within the datarecord
         for n in range(len(self.DataObjects)):
             if self.DataObjects[n].Name == NameToFind:
                 return self.DataObjects[n].Datas.append(data)
 
         quit(str(self) + "Data not found: " + str(NameToFind))
 
-    def find(self, NameToFind):
+    def find(self, NameToFind): # Finds a data object within the data record and returns the list of contents
         for n in range(len(self.DataObjects)):
             if self.DataObjects[n].Name == NameToFind:
                 return self.DataObjects[n].Datas
 
         quit(str(self) + "Data not found: " + str(NameToFind))
 
-    def processData(self):
+    def processData(self): # Fills in zeroes for null data, fills in data up to the length of data that the first data index of the datarecord stores
         for i in range(len(self.DataObjects[0].Datas)):
             for n in range(len(self.DataObjects)):
                 if len(self.DataObjects[n].Datas) < i+1:  # Check if the data is empty
                     self.DataObjects[n].Datas.append(0.0)
 
-    def parseFile(self, directory):
+    def parseFile(self, directory): # Creates datarecord based on imported data, CSV formatted data
         file = open(directory, "r") # Read file
 
         # Parsing header names out and append data storate ------------------------------------------------------------------------------------------------------------------------------
@@ -71,7 +71,7 @@ class DataRecord:
 
         file.close() # Close the file
 
-    def createFile(self, directory):
+    def createFile(self, directory): # Creates a file with the datarecord's data, CSV formatted data
         file = open(directory, "w") # Create new file
 
         for i in range(len(self.DataObjects)): # Write headers
@@ -91,7 +91,8 @@ class DataRecord:
 
         file.close()
 
-# TESTING ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+# --------------------------------------------------------------------------------- TESTING ---------------------------------------------------------------------------------
 '''
 flightData = DataRecord("flightData#1", [])
 flightData.parsefile("Parsing/FL575.CSV")
