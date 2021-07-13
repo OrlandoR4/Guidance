@@ -21,7 +21,7 @@ Rocket.Mass = 0.6
 Rocket.MMOI = ori.Vector3(0.005, 0.0348, 0.0348)
 Rocket.Gravity = ori.Vector3(Sim.Gravity, 0, 0)
 Rocket.Floor = True
-Rocket.setFromEulerAngles(0, -10.0, 5.0, "deg")
+Rocket.setFromEulerAngles(0, -5.0, 10, "deg")
 Rocket.createStandardDataSet("Rocket Data")
 
 # DATA TESTING
@@ -64,7 +64,7 @@ while Sim.iterations <= Sim.Length/Sim.timeStep:
     YPID.PID(radToDeg(Rocket.EulerAngles.y), Sim.timeStep)
     ZPID.PID(radToDeg(Rocket.EulerAngles.z), Sim.timeStep)
 
-    RotatedTVC = rotate(ZPID.output, YPID.output, Rocket.EulerAngles.x)
+    RotatedTVC = rotate(YPID.output, ZPID.output, -Rocket.EulerAngles.x)
 
     YTVC.actuate(RotatedTVC.x, Sim.timeStep)
     ZTVC.actuate(RotatedTVC.y, Sim.timeStep)

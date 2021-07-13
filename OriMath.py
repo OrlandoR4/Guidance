@@ -31,8 +31,8 @@ def rotate(x, y, theta):
     cs = math.cos(theta)
     sn = math.sin(theta)
 
-    rotated_x = x * sn + y * cs
-    rotated_y = x * cs - y * sn
+    rotated_x = x * cs - y * sn
+    rotated_y = x * sn + y * cs
 
     return Vector3(rotated_x, rotated_y, 0)
 
