@@ -13,15 +13,15 @@ import DataUtility as dat
 Sim = nav.Simulation()
 Sim.Length = 30.0
 Sim.timeStep = 0.01
-Sim.Gravity = -9.807
+Sim.Gravity = 9.807
 
 # ------------------------- ROCKET BODY -------------------------
 Rocket = nav.DOF6()
 Rocket.Mass = 0.6
 Rocket.MMOI = ori.Vector3(0.005, 0.0348, 0.0348)
-Rocket.Gravity = ori.Vector3(Sim.Gravity, 0, 0)
+Rocket.Gravity = ori.Vector3(0, 0, Sim.Gravity)
 Rocket.Floor = True
-Rocket.setFromEulerAngles(0, 10, -5, "deg")
+Rocket.setFromEulerAngles(0, 0, 0, "deg")
 Rocket.createStandardDataSet("Rocket Data")
 
 # DATA TESTING
@@ -70,8 +70,8 @@ while Sim.iterations <= Sim.Length/Sim.timeStep:
     if not schedule(0, 8, Sim.Time):
         MotorThrust = 0.0
 
-    Rocket.addTorque(0, YTVC.getTorque(MotorThrust), ZTVC.getTorque(MotorThrust))
-    Rocket.addForce(MotorThrust, 0.0, 0.0)
+    # Rocket.addTorque(0, YTVC.getTorque(MotorThrust), ZTVC.getTorque(MotorThrust))
+    Rocket.addForce(0.0, 0.0, -MotorThrust)
 
     # ------------ UPDATE BODIES ----------
     Rocket.update(Sim.timeStep)
@@ -124,10 +124,10 @@ axCon.set_xlabel("Time")
 axCon.legend(loc="upper right")
 axCon.grid(True)
 
-axPos.plot(time, Rocket.find("PosX"), label="PosX", color = 'red')
+axPos.plot(time, Rocket.find("PosZ"), label="PosZ", color = 'blue')
 axPos2 = axPos.twinx()
 axPos2.plot(time, Rocket.find("PosY"), label="PosY", color = 'green')
-axPos2.plot(time, Rocket.find("PosZ"), label="PosZ", color = 'blue')
+axPos2.plot(time, Rocket.find("PosX"), label="PosX", color = 'red')
 
 axPos.set_title("Position")
 axPos.legend(loc="lower left")
@@ -152,21 +152,21 @@ figure_2.suptitle(Rocket.Dataset.Name)
 
 axPos3D = figure_2.add_subplot(1, 1, 1, projection='3d')
 
-axPos3D.plot(Rocket.find("PosY"), Rocket.find("PosZ"), Rocket.find("PosX"), label = 'Rocket Position', color = 'darkorange')
+axPos3D.plot(Rocket.find("PosY"), Rocket.find("PosX"), Rocket.find("Altitude"), label = 'Rocket Position', color = 'darkorange')
 
 # --------------------------- APOGEE PLOT ---------------------------
 apogeeIndex = Rocket.find("Apogee").index(RocketApogee)
-axPos3D.text(Rocket.find("PosY")[apogeeIndex], Rocket.find("PosZ")[apogeeIndex], Rocket.find("PosX")[apogeeIndex], "   <- Apogee", (0, 0, 0))
-axPos3D.scatter(Rocket.find("PosY")[apogeeIndex], Rocket.find("PosZ")[apogeeIndex], Rocket.find("PosX")[apogeeIndex], color="darkorange", edgecolors="black")
+axPos3D.text(Rocket.find("PosY")[apogeeIndex], Rocket.find("PosX")[apogeeIndex], Rocket.find("Altitude")[apogeeIndex], "   <- Apogee", (0, 0, 0))
+axPos3D.scatter(Rocket.find("PosY")[apogeeIndex], Rocket.find("PosX")[apogeeIndex], Rocket.find("Altitude")[apogeeIndex], color="darkorange", edgecolors="black")
 # --------------------------- LIFTOFF PLOT ---------------------------
-axPos3D.text(Rocket.find("PosY")[0], Rocket.find("PosZ")[0], Rocket.find("PosX")[0], "   <- Liftoff!", (0, 0, 0))
-axPos3D.scatter(Rocket.find("PosY")[0], Rocket.find("PosZ")[0], Rocket.find("PosX")[0], color="darkorange", edgecolors="black")
+axPos3D.text(Rocket.find("PosY")[0], Rocket.find("PosX")[0], Rocket.find("Altitude")[0], "   <- Liftoff!", (0, 0, 0))
+axPos3D.scatter(Rocket.find("PosY")[0], Rocket.find("PosX")[0], Rocket.find("Altitude")[0], color="darkorange", edgecolors="black")
 
 axPos3D.set(xlim=(-posLim, posLim), ylim=(-posLim, posLim), zlim=( 0, RocketApogee+(RocketApogee*0.1) ))
-axPos3D.set_title("Rocket's Position" + "\nRocket's Apogee: " + str(RocketApogee))
+axPos3D.set_title("Rocket's Position" + "\nApogee: " + str(RocketApogee))
 axPos3D.set_xlabel('Y Position')
-axPos3D.set_ylabel('Z Position')
-axPos3D.set_zlabel('X Position')
+axPos3D.set_ylabel('X Position')
+axPos3D.set_zlabel('Altitude')
 # axPos3D.legend(loc="upper left")
 axPos3D.grid(True)
 
