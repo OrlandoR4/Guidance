@@ -6,7 +6,7 @@ import math
                         QUATERNION AND EULER FUNCTIONS' INPUT AND OUTPUT FORMAT HAVE BEEN ADJUSTED FOR THE VECTOR3 CONVENTION:
                                                         X = ROLL, Y = PITCH, Z = YAW
                                                         
-                            X = POSITION ALONG ROLL AXIS, Y = POSITION ALONG PITCH AXIS, Z = POSITION ALONG YAW AXIS
+                                       X-NORTH Y-EAST Z-DOWN STANDARD FOR POSITION, ROCKET X AXIS IS POINTING UP
                             
                                               INPUT DATA TO FUNCTIONS AS XYZ FOR XYZ OUTPUT
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -172,11 +172,11 @@ class Quaternion:
 
         return self
 
-    def VectorRotate(self, z, y, x):
+    def VectorRotate(self, x, y, z):
         RotatedVector = Quaternion(0.0, x, y, z)
         RotatedVector = self * RotatedVector * self.conjugate()
 
-        return Vector3(RotatedVector.z, RotatedVector.y, RotatedVector.x)
+        return Vector3(RotatedVector.x, RotatedVector.y, RotatedVector.z)
 
     def quaternionToEuler(self): # OUTPUT IN RADS
         roll = math.atan2(2.0 * (self.w * self.z + self.x * self.y), 1.0 - 2.0 * (self.y ** 2 + self.z ** 2))

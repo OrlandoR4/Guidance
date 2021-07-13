@@ -50,7 +50,7 @@ class DOF6:
         self.Orientation.IMU_ORI(self.AngularVelocity.x, self.AngularVelocity.y, self.AngularVelocity.z, dt)
         self.EulerAngles = self.Orientation.quaternionToEuler()
 
-        self.GlobalAcceleration = self.Orientation.conjugate().VectorRotate(self.Acceleration.x, self.Acceleration.y, self.Acceleration.z)
+        self.GlobalAcceleration = self.Orientation.VectorRotate(self.Acceleration.x, self.Acceleration.y, self.Acceleration.z)
         self.GlobalAcceleration += self.Gravity
 
         self.Velocity += self.GlobalAcceleration * dt

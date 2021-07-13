@@ -71,7 +71,7 @@ while Sim.iterations <= Sim.Length/Sim.timeStep:
         MotorThrust = 0.0
 
     # Rocket.addTorque(0, YTVC.getTorque(MotorThrust), ZTVC.getTorque(MotorThrust))
-    Rocket.addForce(0.0, 0.0, -MotorThrust)
+    Rocket.addForce(0, 0, -MotorThrust)
 
     # ------------ UPDATE BODIES ----------
     Rocket.update(Sim.timeStep)
