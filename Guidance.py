@@ -84,10 +84,10 @@ while Sim.iterations <= Sim.Length/Sim.timeStep:
     Rocket.addData("YawSetpoint", ZPID.Setpoint)
 
     # APOGEE DATA TESTING
-    if Rocket.Position.x > RocketApogee:
-        RocketApogee = round(Rocket.Position.x, 2)
-    if math.sqrt(Rocket.Position.y ** 2 + Rocket.Position.z ** 2) > posLim:
-        posLim = round(math.sqrt(Rocket.Position.y ** 2 + Rocket.Position.z ** 2), 2)
+    if Rocket.Altitude > RocketApogee:
+        RocketApogee = round(Rocket.Altitude, 2)
+    if math.sqrt(Rocket.Position.x ** 2 + Rocket.Position.y ** 2) > posLim:
+        posLim = round(math.sqrt(Rocket.Position.x ** 2 + Rocket.Position.y ** 2), 2)
 
     Rocket.addData("Apogee", RocketApogee)
 

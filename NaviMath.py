@@ -22,6 +22,7 @@ class DOF6:
     Acceleration = ori.Vector3(0.0, 0.0, 0.0)
     Velocity = ori.Vector3(0.0, 0.0, 0.0)
     Position = ori.Vector3(0.0, 0.0, 0.0)
+    Altitude = 0.0
 
     AngularAcceleration = ori.Vector3(0.0, 0.0, 0.0)
     AngularVelocity = ori.Vector3(0.0, 0.0, 0.0)
@@ -54,18 +55,20 @@ class DOF6:
 
         self.Velocity += self.GlobalAcceleration * dt
         self.Position += self.Velocity * dt
+        self.Altitude = -self.Position.z
 
-        if self.Position.x <= 0.0 and self.Floor:
+        if self.Position.z >= 0.0 and self.Floor:
             self.Velocity.x = 0.0
             self.Velocity.y = 0.0
             self.Velocity.z = 0.0
 
-            self.Position.x = 0.0
+            self.Position.z = 0.0
 
         # -------------------------- LOG-DATA --------------------------------
         self.addData("PosX", self.Position.x)
         self.addData("PosY", self.Position.y)
         self.addData("PosZ", self.Position.z)
+        self.addData("Altitude", self.Altitude)
         self.addData("VelX", self.Velocity.x)
         self.addData("VelY", self.Velocity.y)
         self.addData("VelZ", self.Velocity.z)
@@ -95,6 +98,7 @@ class DOF6:
         self.Dataset.createData("PosX")
         self.Dataset.createData("PosY")
         self.Dataset.createData("PosZ")
+        self.Dataset.createData("Altitude")
         self.Dataset.createData("VelX")
         self.Dataset.createData("VelY")
         self.Dataset.createData("VelZ")
