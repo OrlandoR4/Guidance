@@ -21,7 +21,7 @@ Rocket.Mass = 0.6
 Rocket.MMOI = ori.Vector3(0.005, 0.0348, 0.0348)
 Rocket.Gravity = ori.Vector3(Sim.Gravity, 0, 0)
 Rocket.Floor = True
-Rocket.setFromEulerAngles(0, 5.0, 5.0, "deg")
+Rocket.setFromEulerAngles(0, -10.0, 5.0, "deg")
 Rocket.createStandardDataSet("Rocket Data")
 
 # DATA TESTING
@@ -73,7 +73,7 @@ while Sim.iterations <= Sim.Length/Sim.timeStep:
     if not schedule(0, 8, Sim.Time):
         MotorThrust = 0.0
 
-    # Rocket.addTorque(0, YTVC.getTorque(MotorThrust), ZTVC.getTorque(MotorThrust))
+    Rocket.addTorque(0, YTVC.getTorque(MotorThrust), ZTVC.getTorque(MotorThrust))
     Rocket.addForce(MotorThrust, 0, 0)
 
     # ------------ UPDATE BODIES ----------

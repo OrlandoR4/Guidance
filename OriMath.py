@@ -193,7 +193,6 @@ class Quaternion:
         # asinClamp = ( 2.0 * (self.w * self.y - self.z * self.x) )
         # asinClamp = clamp(asinClamp, -1.0, 1.0)
         # pitch = math.asin(asinClamp)
-
         roll = math.atan2(2.0 * (self.w * self.x + self.y * self.z), 1.0 - 2.0 * (self.x ** 2 + self.y ** 2))
         pitch = 2.0 * (self.w * self.y - self.z * self.x)
         yaw = math.atan2(2.0 * (self.w * self.z + self.x * self.y), 1.0 - 2.0 * (self.y ** 2 + self.z ** 2))
