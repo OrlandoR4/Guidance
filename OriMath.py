@@ -158,12 +158,12 @@ class Quaternion:
         return q
 
     def eulerToQuaternion(self, roll, pitch, yaw): # INPUT IN RADS, INPUT AS XYZ VECTOR3
-        cy = math.cos(roll * 0.5)
-        sy = math.sin(roll * 0.5)
+        cy = math.cos(yaw * 0.5)
+        sy = math.sin(yaw * 0.5)
         cp = math.cos(pitch * 0.5)
         sp = math.sin(pitch * 0.5)
-        cr = math.cos(yaw * 0.5)
-        sr = math.sin(yaw * 0.5)
+        cr = math.cos(roll * 0.5)
+        sr = math.sin(roll * 0.5)
 
         self.w = cr * cp * cy + sr * sp * sy
         self.x = sr * cp * cy - cr * sp * sy
@@ -173,10 +173,10 @@ class Quaternion:
         return self
 
     def VectorRotate(self, x, y, z):
-        RotatedVector = Quaternion(0.0, z, y, x)
+        RotatedVector = Quaternion(0.0, x, y, z)
         RotatedVector = self * RotatedVector * self.conjugate()
 
-        return Vector3(RotatedVector.z, RotatedVector.y, RotatedVector.x)
+        return Vector3(RotatedVector.x, RotatedVector.y, RotatedVector.z)
 
     def quaternionToEuler(self): # OUTPUT IN RADS
         # used to get out of function range, commenting untested, comment the following three lines, and comment out the lower one
@@ -184,9 +184,9 @@ class Quaternion:
         # asinClamp = clamp(asinClamp, -1.0, 1.0)
         # pitch = math.asin(asinClamp)
 
-        roll = math.atan2(2.0 * (self.w * self.z + self.x * self.y), 1.0 - 2.0 * (self.y ** 2 + self.z ** 2))
+        roll = math.atan2(2.0 * (self.w * self.x + self.y * self.z), 1.0 - 2.0 * (self.x ** 2 + self.y ** 2))
         pitch = 2.0 * (self.w * self.y - self.z * self.x)
-        yaw = math.atan2(2.0 * (self.w * self.x + self.y * self.z), 1.0 - 2.0 * (self.x ** 2 + self.y ** 2))
+        yaw = math.atan2(2.0 * (self.w * self.z + self.x * self.y), 1.0 - 2.0 * (self.y ** 2 + self.z ** 2))
 
         return Vector3(roll, pitch, yaw) # Z-Yaw Y-Pitch X-Roll
 

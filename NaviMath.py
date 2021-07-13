@@ -42,14 +42,14 @@ class DOF6:
         self.Acceleration += ori.Vector3(x, y, z)/self.Mass
 
     def addTorque(self, x, y, z): # Adds torque moments to the object based on mass moment of inertia
-        self.AngularAcceleration += ori.Vector3(z, y, x)/ori.Vector3(self.MMOI.z, self.MMOI.y, self.MMOI.x)
+        self.AngularAcceleration += ori.Vector3(x, y, z)/ori.Vector3(self.MMOI.x, self.MMOI.y, self.MMOI.z)
 
     def update(self, dt): # Updates rigidbody and appends data
         self.AngularVelocity += self.AngularAcceleration * dt
         self.Orientation.IMU_ORI(self.AngularVelocity.x, self.AngularVelocity.y, self.AngularVelocity.z, dt)
         self.EulerAngles = self.Orientation.quaternionToEuler()
 
-        self.GlobalAcceleration = self.Orientation.conjugate().VectorRotate(self.Acceleration.x, self.Acceleration.y, self.Acceleration.z)
+        self.GlobalAcceleration = self.Orientation.VectorRotate(self.Acceleration.x, self.Acceleration.y, self.Acceleration.z)
         self.GlobalAcceleration += self.Gravity
 
         self.Velocity += self.GlobalAcceleration * dt
