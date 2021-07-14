@@ -13,18 +13,26 @@ import math
 '''
 
 
-def clamp(n, minn, maxn):
+def clamp(n, minn, maxn): # Clamps output to a range
     return max(min(maxn, n), minn)
 
 
-def radToDeg(num):
-    num = num * 180.0 / 3.14159
-    return num
+def radToDeg(num): # Returns a degrees conversion of a radian angle
+    return num * 180.0 / 3.14159
 
 
-def degToRad(num):
-    num = num / 180.0 * 3.14159
-    return num
+def degToRad(num):  # Returns a radians conversion of a degree angle
+    return num / 180.0 * 3.14159
+
+
+def rotate(x, y, theta): # Rotates a 2D vector by an angle theta, returns a Vector3 with XY and a 0 Z component
+    cs = math.cos(theta)
+    sn = math.sin(theta)
+
+    rotated_x = x * cs - y * sn
+    rotated_y = x * sn + y * cs
+
+    return Vector3(rotated_x, rotated_y, 0)
 
 
 class Vector3:
@@ -157,7 +165,7 @@ class Quaternion:
 
         return q
 
-    def eulerToQuaternion(self, yaw, pitch, roll): # INPUT IN RADS, INPUT AS XYZ VECTOR3
+    def eulerToQuaternion(self, roll, pitch, yaw): # INPUT IN RADS, INPUT AS XYZ VECTOR3
         cy = math.cos(yaw * 0.5)
         sy = math.sin(yaw * 0.5)
         cp = math.cos(pitch * 0.5)
@@ -172,22 +180,20 @@ class Quaternion:
 
         return self
 
-    def VectorRotate(self, z, y, x):
+    def VectorRotate(self, x, y, z):
         RotatedVector = Quaternion(0.0, x, y, z)
         RotatedVector = self * RotatedVector * self.conjugate()
 
-        return Vector3(RotatedVector.z, RotatedVector.y, RotatedVector.x)
+        return Vector3(RotatedVector.x, RotatedVector.y, RotatedVector.z)
 
     def quaternionToEuler(self): # OUTPUT IN RADS
-        roll = math.atan2(2.0 * (self.w * self.z + self.x * self.y), 1.0 - 2.0 * (self.y ** 2 + self.z ** 2))
-
         # used to get out of function range, commenting untested, comment the following three lines, and comment out the lower one
-        asinClamp = ( 2.0 * (self.w * self.y - self.z * self.x) )
-        asinClamp = clamp(asinClamp, -1.0, 1.0)
-        pitch = math.asin(asinClamp)
-
-        # pitch = 2.0 * (self.w * self.y - self.z * self.x)
-        yaw = math.atan2(2.0 * (self.w * self.x + self.y * self.z), 1.0 - 2.0 * (self.x ** 2 + self.y ** 2))
+        # asinClamp = ( 2.0 * (self.w * self.y - self.z * self.x) )
+        # asinClamp = clamp(asinClamp, -1.0, 1.0)
+        # pitch = math.asin(asinClamp)
+        roll = math.atan2(2.0 * (self.w * self.x + self.y * self.z), 1.0 - 2.0 * (self.x ** 2 + self.y ** 2))
+        pitch = 2.0 * (self.w * self.y - self.z * self.x)
+        yaw = math.atan2(2.0 * (self.w * self.z + self.x * self.y), 1.0 - 2.0 * (self.y ** 2 + self.z ** 2))
 
         return Vector3(roll, pitch, yaw) # Z-Yaw Y-Pitch X-Roll
 

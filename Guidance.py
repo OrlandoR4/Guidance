@@ -2,7 +2,7 @@ import math
 import matplotlib.pyplot as plt
 
 import OriMath as ori
-from OriMath import radToDeg, degToRad, clamp
+from OriMath import radToDeg, degToRad, clamp, rotate
 
 import NaviMath as nav
 from NaviMath import schedule
@@ -21,12 +21,12 @@ Rocket.Mass = 0.6
 Rocket.MMOI = ori.Vector3(0.005, 0.0348, 0.0348)
 Rocket.Gravity = ori.Vector3(Sim.Gravity, 0, 0)
 Rocket.Floor = True
-Rocket.setFromEulerAngles(0, 10, -5, "deg")
+Rocket.setFromEulerAngles(0, 5, -10, "deg")
 Rocket.createStandardDataSet("Rocket Data")
 
 # DATA TESTING
-RocketApogee = 0.0 # Apogee for graph
-posLim = 0.0 # Limit for position graph
+RocketApogee = 1.0 # Apogee for graph
+posLim = 1.0 # Limit for position graph
 
 # ------------------------- ORIENTATION PID -------------------------
 YPID = nav.PID(0.25, 0.0, 0.1)
@@ -43,7 +43,7 @@ Pos_ZPID = nav.PID(Pos_YPID.kP, Pos_YPID.kI, Pos_YPID.kD)
 Pos_ZPID.Setpoint = 0.0
 
 # ------------------------- TVC OBJECTS -------------------------
-YTVC = nav.TVC(5.0, 0.0, 0.3, 45.0)
+YTVC = nav.TVC(degToRad(5.0), 0.0, 0.3, degToRad(45.0))
 ZTVC = nav.TVC(YTVC.Max, 0.0, YTVC.Lever, YTVC.AngleSpeed)
 
 MotorThrust = 10.0
@@ -55,7 +55,13 @@ Rocket.Dataset.createData("YawSetpoint")
 Rocket.Dataset.createData("Apogee")
 
 while Sim.iterations <= Sim.Length/Sim.timeStep:
-
+    '''
+                    THE PID IN THIS EXAMPLE IS SET UP WITH DEG INPUT, DEG OUTPUT, DEG SETPOINT
+                                  FEEL FREE TO CHANGE IT TO RAD-EVERYTHING
+                                 
+                        THE TVC WORKS IN RADIANS, BUT IS LOGGED AS DEGREES IN THIS EXAMPLE
+               EULER ANGLES ARE LOGGED AS DEGREES BY DEFAULT, CHECK DOF6 IN NAVIMATH FOR MORE INFO
+    '''
     # ------------- POSITION CONTROL --------------
     # YPID.Setpoint = -clamp(Pos_ZPID.PID(Rocket.Position.z, Sim.timeStep), -25, 25)
     # ZPID.Setpoint = clamp(Pos_YPID.PID(Rocket.Position.y, Sim.timeStep), -25, 25)
@@ -63,23 +69,26 @@ while Sim.iterations <= Sim.Length/Sim.timeStep:
     # ------------- CONTROL --------------
     YPID.PID(radToDeg(Rocket.EulerAngles.y), Sim.timeStep)
     ZPID.PID(radToDeg(Rocket.EulerAngles.z), Sim.timeStep)
-    YTVC.actuate(YPID.output, Sim.timeStep)
-    ZTVC.actuate(ZPID.output, Sim.timeStep)
+
+    RotatedTVC = rotate(YPID.output, ZPID.output, -Rocket.EulerAngles.x) # Rotate TVC to compensate for body roll
+
+    YTVC.actuate(degToRad(RotatedTVC.x), Sim.timeStep) # PID output is represented to be degrees, TVC takes in radians
+    ZTVC.actuate(degToRad(RotatedTVC.y), Sim.timeStep) # PID output is represented to be degrees, TVC takes in radians
 
     # ------------- PHYSICS --------------
-    if not schedule(0, 8, Sim.Time):
+    if not schedule(0, 8, Sim.Time): # Set the motor thrust to zero after 8 seconds
         MotorThrust = 0.0
 
     Rocket.addTorque(0, YTVC.getTorque(MotorThrust), ZTVC.getTorque(MotorThrust))
-    Rocket.addForce(MotorThrust, 0.0, 0.0)
+    Rocket.addForce(MotorThrust, 0, 0)
 
     # ------------ UPDATE BODIES ----------
     Rocket.update(Sim.timeStep)
 
     # ------------- LOGGING --------------
     Rocket.addData("Time", Sim.Time)
-    Rocket.addData("YTVC", -YTVC.Angle) # Reversed to be compatible with real data (CHANGE)
-    Rocket.addData("ZTVC", -ZTVC.Angle) # Reversed to be compatible with real data (CHANGE)
+    Rocket.addData("YTVC", radToDeg(-YTVC.Angle)) # Reversed to be compatible with real data (CHANGE)
+    Rocket.addData("ZTVC", radToDeg(-ZTVC.Angle)) # Reversed to be compatible with real data (CHANGE)
     Rocket.addData("PitchSetpoint", YPID.Setpoint)
     Rocket.addData("YawSetpoint", ZPID.Setpoint)
 
@@ -116,8 +125,8 @@ axOri.grid(True)
 
 axCon.plot(time, Rocket.find("YTVC"), label="YTVC", color = 'green')
 axCon.plot(time, Rocket.find("ZTVC"), label="ZTVC", color = 'blue')
-axCon.plot(time, Rocket.find("PitchSetpoint"), label="PitchSetpoint", color = 'darkgreen')
-axCon.plot(time, Rocket.find("YawSetpoint"), label="YawSetpoint", color = 'darkblue')
+axCon.plot(time, Rocket.find("PitchSetpoint"), label="PitchSetpoint", color = 'teal')
+axCon.plot(time, Rocket.find("YawSetpoint"), label="YawSetpoint", color = 'purple')
 
 axCon.set_title("Control")
 axCon.set_xlabel("Time")
