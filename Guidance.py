@@ -23,7 +23,7 @@ Rocket.Mass = 0.6
 Rocket.MMOI = ori.Vector3(0.005, 0.0348, 0.0348)
 Rocket.Gravity = ori.Vector3(Sim.Gravity, 0, 0)
 Rocket.Floor = True
-Rocket.setFromEulerAngles(0, -10.0, 5.0, "deg")
+Rocket.setFromEulerAngles(0, 5, -10, "deg")
 Rocket.createStandardDataSet("Rocket Data")
 
 # DATA TESTING
@@ -45,7 +45,7 @@ Pos_ZPID = nav.PID(Pos_YPID.kP, Pos_YPID.kI, Pos_YPID.kD)
 Pos_ZPID.Setpoint = 0.0
 
 # ------------------------- TVC OBJECTS -------------------------
-YTVC = nav.TVC(5.0, 0.0, 0.3, 45.0)
+YTVC = nav.TVC(degToRad(5.0), 0.0, 0.3, degToRad(45.0))
 ZTVC = nav.TVC(YTVC.Max, 0.0, YTVC.Lever, YTVC.AngleSpeed)
 
 Rocket.Dataset.createData("YTVC")
@@ -58,7 +58,13 @@ Rocket.Dataset.createData("Apogee")
 motor = ThrustCurve("Estes_E16.rse")
 
 while Sim.iterations <= Sim.Length/Sim.timeStep:
-
+    '''
+                    THE PID IN THIS EXAMPLE IS SET UP WITH DEG INPUT, DEG OUTPUT, DEG SETPOINT
+                                  FEEL FREE TO CHANGE IT TO RAD-EVERYTHING
+                                 
+                        THE TVC WORKS IN RADIANS, BUT IS LOGGED AS DEGREES IN THIS EXAMPLE
+               EULER ANGLES ARE LOGGED AS DEGREES BY DEFAULT, CHECK DOF6 IN NAVIMATH FOR MORE INFO
+    '''
     # ------------- POSITION CONTROL --------------
     # YPID.Setpoint = -clamp(Pos_ZPID.PID(Rocket.Position.z, Sim.timeStep), -25, 25)
     # ZPID.Setpoint = clamp(Pos_YPID.PID(Rocket.Position.y, Sim.timeStep), -25, 25)
@@ -67,10 +73,10 @@ while Sim.iterations <= Sim.Length/Sim.timeStep:
     YPID.PID(radToDeg(Rocket.EulerAngles.y), Sim.timeStep)
     ZPID.PID(radToDeg(Rocket.EulerAngles.z), Sim.timeStep)
 
-    RotatedTVC = rotate(ZPID.output, YPID.output, Rocket.EulerAngles.x)
+    RotatedTVC = rotate(YPID.output, ZPID.output, -Rocket.EulerAngles.x) # Rotate TVC to compensate for body roll
 
-    YTVC.actuate(RotatedTVC.x, Sim.timeStep)
-    ZTVC.actuate(RotatedTVC.y, Sim.timeStep)
+    YTVC.actuate(degToRad(RotatedTVC.x), Sim.timeStep) # PID output is represented to be degrees, TVC takes in radians
+    ZTVC.actuate(degToRad(RotatedTVC.y), Sim.timeStep) # PID output is represented to be degrees, TVC takes in radians
 
     # ------------- PHYSICS --------------
     MotorThrust = motor.getThrust(Sim.Time)
@@ -83,8 +89,8 @@ while Sim.iterations <= Sim.Length/Sim.timeStep:
 
     # ------------- LOGGING --------------
     Rocket.addData("Time", Sim.Time)
-    Rocket.addData("YTVC", -YTVC.Angle) # Reversed to be compatible with real data (CHANGE)
-    Rocket.addData("ZTVC", -ZTVC.Angle) # Reversed to be compatible with real data (CHANGE)
+    Rocket.addData("YTVC", radToDeg(-YTVC.Angle)) # Reversed to be compatible with real data (CHANGE)
+    Rocket.addData("ZTVC", radToDeg(-ZTVC.Angle)) # Reversed to be compatible with real data (CHANGE)
     Rocket.addData("PitchSetpoint", YPID.Setpoint)
     Rocket.addData("YawSetpoint", ZPID.Setpoint)
 
@@ -121,8 +127,8 @@ axOri.grid(True)
 
 axCon.plot(time, Rocket.find("YTVC"), label="YTVC", color = 'green')
 axCon.plot(time, Rocket.find("ZTVC"), label="ZTVC", color = 'blue')
-axCon.plot(time, Rocket.find("PitchSetpoint"), label="PitchSetpoint", color = 'darkgreen')
-axCon.plot(time, Rocket.find("YawSetpoint"), label="YawSetpoint", color = 'darkblue')
+axCon.plot(time, Rocket.find("PitchSetpoint"), label="PitchSetpoint", color = 'teal')
+axCon.plot(time, Rocket.find("YawSetpoint"), label="YawSetpoint", color = 'purple')
 
 axCon.set_title("Control")
 axCon.set_xlabel("Time")

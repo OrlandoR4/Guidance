@@ -13,26 +13,24 @@ import math
 '''
 
 
-def clamp(n, minn, maxn):
+def clamp(n, minn, maxn): # Clamps output to a range
     return max(min(maxn, n), minn)
 
 
-def radToDeg(num):
-    num = num * 180.0 / 3.14159
-    return num
+def radToDeg(num): # Returns a degrees conversion of a radian angle
+    return num * 180.0 / 3.14159
 
 
-def degToRad(num):
-    num = num / 180.0 * 3.14159
-    return num
+def degToRad(num):  # Returns a radians conversion of a degree angle
+    return num / 180.0 * 3.14159
 
 
-def rotate(x, y, theta):
+def rotate(x, y, theta): # Rotates a 2D vector by an angle theta, returns a Vector3 with XY and a 0 Z component
     cs = math.cos(theta)
     sn = math.sin(theta)
 
-    rotated_x = x * sn + y * cs
-    rotated_y = x * cs - y * sn
+    rotated_x = x * cs - y * sn
+    rotated_y = x * sn + y * cs
 
     return Vector3(rotated_x, rotated_y, 0)
 
