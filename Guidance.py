@@ -106,7 +106,7 @@ while Sim.iterations <= Sim.Length/Sim.timeStep:
 
 # ---------------------------- DATA PROCESSING ----------------------------
 Rocket.processData()
-Rocket.Dataset.createFile("Data Directory/FLIGHTLOGTEST_1.CSV")
+# Rocket.Dataset.createFile("data_directory/FLIGHTLOGTEST_1.CSV")
 
 # --------------- FIGURE ONE --------------------------------- MATPLOTLIB PLOTTING ------------------------------
 time = Rocket.find("Time") # Find standard time
