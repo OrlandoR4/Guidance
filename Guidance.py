@@ -9,9 +9,11 @@ from NaviMath import schedule
 
 import DataUtility as dat
 
+from ThrustCurve import ThrustCurve
+
 # ------------------------- SIMULATION -------------------------
 Sim = nav.Simulation()
-Sim.Length = 30.0
+Sim.Length = 15.0
 Sim.timeStep = 0.01
 Sim.Gravity = -9.807
 
@@ -46,13 +48,14 @@ Pos_ZPID.Setpoint = 0.0
 YTVC = nav.TVC(5.0, 0.0, 0.3, 45.0)
 ZTVC = nav.TVC(YTVC.Max, 0.0, YTVC.Lever, YTVC.AngleSpeed)
 
-MotorThrust = 10.0
-
 Rocket.Dataset.createData("YTVC")
 Rocket.Dataset.createData("ZTVC")
 Rocket.Dataset.createData("PitchSetpoint")
 Rocket.Dataset.createData("YawSetpoint")
 Rocket.Dataset.createData("Apogee")
+
+# ---------------------------- MOTOR ----------------------------
+motor = ThrustCurve("Estes_E16.rse")
 
 while Sim.iterations <= Sim.Length/Sim.timeStep:
 
@@ -70,8 +73,7 @@ while Sim.iterations <= Sim.Length/Sim.timeStep:
     ZTVC.actuate(RotatedTVC.y, Sim.timeStep)
 
     # ------------- PHYSICS --------------
-    if not schedule(0, 8, Sim.Time):
-        MotorThrust = 0.0
+    MotorThrust = motor.getThrust(Sim.Time)
 
     Rocket.addTorque(0, YTVC.getTorque(MotorThrust), ZTVC.getTorque(MotorThrust))
     Rocket.addForce(MotorThrust, 0, 0)
