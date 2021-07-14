@@ -2,6 +2,7 @@ import math
 import DataUtility as dat
 import OriMath as ori
 from OriMath import radToDeg, degToRad, clamp
+import numpy as np
 
 
 def schedule(startTime, endTime, Time):
@@ -152,6 +153,36 @@ class Keyboard:
         self.RGB = aRGB
 
 
+class FSF:
+    #Literally your controller gains
+    K = np.matrix([0, 0, 0, 0])
+
+    #Setpoints for each state
+    r = np.matrix([[0], #Ori
+                  [0], #OriRate
+                  [0], #Pos
+                  [0]]) #Vel
+
+    previousOri = 0
+    previousPos = 0
+    output = 0.0
+
+    def __init__(self, sK):
+        self.K = sK
+
+    def FSF(self, ori, pos, dt):
+        x = np.matrix([[ori],
+                       [(ori - self.previousOri) / dt],
+                       [pos],
+                       [(pos - self.previousPos) / dt]])
+        outputVector = x*self.K
+        outputVector -= self.r #Might wanna add a scaling factor here for steady state performance. A todo for sure
+        self.output = np.matrix.sum(outputVector) #Furthermore, the integrator is missing for now. Yet another todo
+        return (self.output)
+
+    
+
+    
 class PID:
     kP = 0.0
     kI = 0.0
