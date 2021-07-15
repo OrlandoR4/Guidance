@@ -19,17 +19,23 @@ class ThrustCurve:
     if len(data) == 0:
       quit(str(self) + "__init__: Engine thrust curve empty")
 
-    measurementTimes = []
-    measurementValues = []
+    measurementTime = []
+    measurementThrust = []
+    measurementMass = []
 
     for dataPoint in data:
       try:
-        measurementTimes.append(float(dataPoint.getAttribute("t")))
-        measurementValues.append(float(dataPoint.getAttribute("f")))
+        measurementTime.append(float(dataPoint.getAttribute("t")))
+        measurementThrust.append(float(dataPoint.getAttribute("f")))
+        measurementMass.append(float(dataPoint.getAttribute("m")))
       except ValueError:
         quit(str(self) + "__init__: Engine thrust data point invalid")
 
-    self.thrustInterpolator = interp1d(measurementTimes, measurementValues, bounds_error=False, fill_value=0)
+    self.thrustInterpolator = interp1d(measurementTime, measurementThrust, bounds_error=False, fill_value=0)
+    self.massInterpolator = interp1d(measurementTime, measurementMass, bounds_error=False, fill_value=0)
 
   def getThrust(self, time):
     return self.thrustInterpolator([time])[0]
+
+  def getMass(self, time):
+    return self.massInterpolator([time])[0]

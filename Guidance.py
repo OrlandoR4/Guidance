@@ -79,6 +79,7 @@ while Sim.iterations <= Sim.Length/Sim.timeStep:
 
     # ------------- PHYSICS --------------
     MotorThrust = motor.getThrust(Sim.Time)
+    # print("Motor mass: " + str(motor.getMass(Sim.Time)))
 
     Rocket.addTorque(0, YTVC.getTorque(MotorThrust), ZTVC.getTorque(MotorThrust))
     Rocket.addForce(MotorThrust, 0, 0)
