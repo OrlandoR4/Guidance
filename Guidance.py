@@ -18,13 +18,12 @@ Sim.timeStep = 0.01
 Sim.Gravity = -9.807
 
 # ------------------------- ROCKET BODY -------------------------
-Rocket = nav.DOF6()
+Rocket = nav.DOF6("Rocket")
 Rocket.Mass = 0.6
 Rocket.MMOI = ori.Vector3(0.005, 0.0348, 0.0348)
 Rocket.Gravity = ori.Vector3(Sim.Gravity, 0, 0)
 Rocket.Floor = True
 Rocket.setFromEulerAngles(0, 5, -10, "deg")
-Rocket.createStandardDataSet("Rocket Data")
 
 # DATA TESTING
 RocketApogee = 1.0 # Apogee for graph
@@ -76,7 +75,7 @@ while Sim.iterations <= Sim.Length/Sim.timeStep:
     RotatedTVC = rotate(YPID.output, ZPID.output, -Rocket.EulerAngles.x) # Rotate TVC to compensate for body roll
 
     YTVC.actuate(degToRad(RotatedTVC.x), Sim.timeStep) # PID output is represented to be degrees, TVC takes in radians
-    ZTVC.actuate(degToRad(RotatedTVC.y), Sim.timeStep) # PID output is represented to be degrees, TVC takes in radians
+    ZTVC.actuate(degToRad(RotatedTVC.y), Sim.timeStep)
 
     # ------------- PHYSICS --------------
     MotorThrust = motor.getThrust(Sim.Time)
@@ -108,13 +107,13 @@ while Sim.iterations <= Sim.Length/Sim.timeStep:
 
 # ---------------------------- DATA PROCESSING ----------------------------
 Rocket.processData()
-Rocket.Dataset.createFile("Data Directory/FLIGHTLOGTEST_1.CSV")
+# Rocket.Dataset.createFile("data_directory/FLIGHTLOGTEST_1.CSV")
 
 # --------------- FIGURE ONE --------------------------------- MATPLOTLIB PLOTTING ------------------------------
 time = Rocket.find("Time") # Find standard time
 
 figure_1, ((axOri, axPos), (axCon, axVel)) = plt.subplots(2, 2)
-figure_1.set_size_inches(15, 9)
+figure_1.set_size_inches(12, 8)
 figure_1.suptitle(Rocket.Dataset.Name)
 
 axOri.plot(time, Rocket.find("Roll"), label="Roll", color = 'red')
@@ -158,7 +157,7 @@ axVel.legend(loc="upper right")
 axVel.grid(True)
 # -------------------------- FIGURE TWO -------------------------------
 figure_2 = plt.figure()
-figure_1.set_size_inches(9, 9)
+figure_2.set_size_inches(6, 5)
 figure_2.suptitle(Rocket.Dataset.Name)
 
 axPos3D = figure_2.add_subplot(1, 1, 1, projection='3d')
@@ -174,7 +173,7 @@ axPos3D.text(Rocket.find("PosY")[0], Rocket.find("PosZ")[0], Rocket.find("PosX")
 axPos3D.scatter(Rocket.find("PosY")[0], Rocket.find("PosZ")[0], Rocket.find("PosX")[0], color="darkorange", edgecolors="black")
 
 axPos3D.set(xlim=(-posLim, posLim), ylim=(-posLim, posLim), zlim=( 0, RocketApogee+(RocketApogee*0.1) ))
-axPos3D.set_title("Rocket's Position" + "\nRocket's Apogee: " + str(RocketApogee))
+axPos3D.set_title("Apogee: " + str(RocketApogee))
 axPos3D.set_xlabel('Y Position')
 axPos3D.set_ylabel('Z Position')
 axPos3D.set_zlabel('X Position')
