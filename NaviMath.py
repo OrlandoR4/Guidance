@@ -1,8 +1,8 @@
 import math
 
-import DataUtility as dat
+from DataUtility import Data, DataRecord
 
-import OriMath as ori
+from OriMath import Vector3, Quaternion
 from OriMath import radToDeg, degToRad, clamp
 
 
@@ -66,23 +66,23 @@ class DOF6:
     '''
 
     Name = ""
-    Dataset = dat.DataRecord("")
+    Dataset = DataRecord("")
 
     Mass = 0.0
-    MMOI = ori.Vector3(0.0, 0.0, 0.0)
-    Gravity = ori.Vector3(0.0, 0.0, 0.0)
+    MMOI = Vector3(0.0, 0.0, 0.0)
+    Gravity = Vector3(0.0, 0.0, 0.0)
     Floor = False
 
-    Acceleration = ori.Vector3(0.0, 0.0, 0.0)
-    AngularAcceleration = ori.Vector3(0.0, 0.0, 0.0)
-    AngularVelocity = ori.Vector3(0.0, 0.0, 0.0)
+    Acceleration = Vector3(0.0, 0.0, 0.0)
+    AngularAcceleration = Vector3(0.0, 0.0, 0.0)
+    AngularVelocity = Vector3(0.0, 0.0, 0.0)
 
-    Orientation = ori.Quaternion(1.0, 0.0, 0.0, 0.0)
-    EulerAngles = ori.Vector3(0.0, 0.0, 0.0)
+    Orientation = Quaternion(1.0, 0.0, 0.0, 0.0)
+    EulerAngles = Vector3(0.0, 0.0, 0.0)
 
-    GlobalAcceleration = ori.Vector3(0.0, 0.0, 0.0)
-    Velocity = ori.Vector3(0.0, 0.0, 0.0)
-    Position = ori.Vector3(0.0, 0.0, 0.0)
+    GlobalAcceleration = Vector3(0.0, 0.0, 0.0)
+    Velocity = Vector3(0.0, 0.0, 0.0)
+    Position = Vector3(0.0, 0.0, 0.0)
 
     def __init__(self, sName):
         self.Name = sName
@@ -120,10 +120,10 @@ class DOF6:
             quit(str(self) + "setFromEulerAngles: invalid argument, use valid 'deg' or 'rad'")
 
     def addForce(self, x, y, z):
-        self.Acceleration += ori.Vector3(x, y, z)/self.Mass
+        self.Acceleration += Vector3(x, y, z)/self.Mass
 
     def addTorque(self, x, y, z):
-        self.AngularAcceleration += ori.Vector3(x, y, z)/ori.Vector3(self.MMOI.x, self.MMOI.y, self.MMOI.z)
+        self.AngularAcceleration += Vector3(x, y, z)/Vector3(self.MMOI.x, self.MMOI.y, self.MMOI.z)
 
     def update(self, dt):
         self.AngularVelocity += self.AngularAcceleration * dt
@@ -173,8 +173,8 @@ class DOF6:
         self.addData("AngularAccZ", radToDeg(self.AngularAcceleration.z))
 
         # ------------------ RESET ------------------
-        self.Acceleration = ori.Vector3(0, 0, 0)
-        self.AngularAcceleration = ori.Vector3(0, 0, 0)
+        self.Acceleration = Vector3(0, 0, 0)
+        self.AngularAcceleration = Vector3(0, 0, 0)
 
     # You can directly call the Dataset property of DOF6, but these functions will make the code much cleaner, the same functions can be used for the Dataset object
 

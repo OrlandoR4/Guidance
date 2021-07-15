@@ -1,0 +1,38 @@
+<engine-database>
+  <engine-list>
+    <engine  mfg="Aerotech" code="H13ST" Type="single-use" dia="29." len="213."
+initWt="203.4" propWt="116.4" delays="0" auto-calc-mass="1" auto-calc-cg="1"
+avgThrust="13.928" peakThrust="44.529" throatDia="0." exitDia="0." Itot="214.935"
+burn-time="15.43" massFrac="57.23" Isp="188.29" tDiv="10" tStep="-1." tFix="1"
+FDiv="10" FStep="-1." FFix="1" mDiv="10" mStep="-1." mFix="1" cgDiv="10"
+cgStep="-1." cgFix="1">
+    <comments>AeroTech H13ST, data from TMT test firing</comments>
+    <data>
+      <eng-data  t="0." f="0." m="116.4" cg="106.5"/>
+      <eng-data  t="0.005" f="0.107" m="116.4" cg="106.5"/>
+      <eng-data  t="0.024" f="2.636" m="116.386" cg="106.5"/>
+      <eng-data  t="0.035" f="18.978" m="116.321" cg="106.5"/>
+      <eng-data  t="0.081" f="32.724" m="115.677" cg="106.5"/>
+      <eng-data  t="0.147" f="36.421" m="114.442" cg="106.5"/>
+      <eng-data  t="0.379" f="44.529" m="109.356" cg="106.5"/>
+      <eng-data  t="0.452" f="23.851" m="108.005" cg="106.5"/>
+      <eng-data  t="0.566" f="18.89" m="106.685" cg="106.5"/>
+      <eng-data  t="0.818" f="16.728" m="104.255" cg="106.5"/>
+      <eng-data  t="1.286" f="15.676" m="100.148" cg="106.5"/>
+      <eng-data  t="2.114" f="14.753" m="93.3261" cg="106.5"/>
+      <eng-data  t="3.23" f="14.032" m="84.6275" cg="106.5"/>
+      <eng-data  t="4.382" f="13.926" m="75.9064" cg="106.5"/>
+      <eng-data  t="5.786" f="13.469" m="65.4915" cg="106.5"/>
+      <eng-data  t="7.082" f="13.119" m="56.1609" cg="106.5"/>
+      <eng-data  t="8.666" f="12.916" m="44.9941" cg="106.5"/>
+      <eng-data  t="10.286" f="12.82" m="33.7047" cg="106.5"/>
+      <eng-data  t="12.086" f="12.612" m="21.309" cg="106.5"/>
+      <eng-data  t="13.598" f="12.333" m="11.0961" cg="106.5"/>
+      <eng-data  t="14.75" f="11.908" m="3.53438" cg="106.5"/>
+      <eng-data  t="15.23" f="11.078" m="0.546789" cg="106.5"/>
+      <eng-data  t="15.302" f="6.048" m="0.212898" cg="106.5"/>
+      <eng-data  t="15.432" f="0." m="0." cg="106.5"/>
+    </data>
+  </engine>
+</engine-list>
+</engine-database>
