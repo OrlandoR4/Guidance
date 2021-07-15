@@ -54,7 +54,7 @@ Rocket.Dataset.createData("YawSetpoint")
 Rocket.Dataset.createData("Apogee")
 
 # ---------------------------- MOTOR ----------------------------
-motor = ThrustCurve("Estes_E16.rse")
+motor = ThrustCurve("motor_files/Estes_E16.rse")
 
 while Sim.iterations <= Sim.Length/Sim.timeStep:
     '''
