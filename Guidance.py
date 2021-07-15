@@ -13,13 +13,13 @@ from ThrustCurve import ThrustCurve
 
 # ------------------------- SIMULATION -------------------------
 Sim = Simulation()
-Sim.Length = 60.0
+Sim.Length = 10.0
 Sim.timeStep = 0.005
 Sim.Gravity = -9.807
 
 # ------------------------- ROCKET BODY -------------------------
 Rocket = DOF6("Rocket")
-Rocket.Mass = 0.8
+Rocket.Mass = 0.660
 Rocket.MMOI = Vector3(0.005, 0.0348, 0.0348)
 Rocket.Gravity = Vector3(Sim.Gravity, 0, 0)
 Rocket.Floor = True
@@ -55,7 +55,7 @@ Rocket.Dataset.createData("Apogee")
 
 # ---------------------------- MOTOR ----------------------------
 # Motor = ThrustCurve("motor_files/Estes_E16.rse")
-Motor = ThrustCurve("motor_files/AeroTech_H13ST.rse")
+Motor = ThrustCurve("motor_files/Estes_E12.rse")
 MotorThrust = 0.0
 
 while Sim.iterations <= Sim.Length/Sim.timeStep:

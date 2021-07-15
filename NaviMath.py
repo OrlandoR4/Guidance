@@ -178,8 +178,8 @@ class DOF6:
 
     # You can directly call the Dataset property of DOF6, but these functions will make the code much cleaner, the same functions can be used for the Dataset object
 
-    def addData(self, NameToFind, Data):
-        return self.Dataset.addData(NameToFind, Data)
+    def addData(self, NameToFind, data):
+        return self.Dataset.addData(NameToFind, data)
 
     def find(self, NameToFind):
         return self.Dataset.find(NameToFind)
