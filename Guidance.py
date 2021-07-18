@@ -1,27 +1,27 @@
 import math
 import matplotlib.pyplot as plt
 
-import OriMath as ori
+from OriMath import Vector3, Quaternion
 from OriMath import radToDeg, degToRad, clamp, rotate
 
-import NaviMath as nav
+from NaviMath import DOF6, Simulation, PID, TVC
 from NaviMath import schedule
 
-import DataUtility as dat
+from DataUtility import Data, DataRecord
 
 from ThrustCurve import ThrustCurve
 
 # ------------------------- SIMULATION -------------------------
-Sim = nav.Simulation()
-Sim.Length = 15.0
-Sim.timeStep = 0.01
+Sim = Simulation()
+Sim.Length = 10.0
+Sim.timeStep = 0.005
 Sim.Gravity = -9.807
 
 # ------------------------- ROCKET BODY -------------------------
-Rocket = nav.DOF6("Rocket")
-Rocket.Mass = 0.6
-Rocket.MMOI = ori.Vector3(0.005, 0.0348, 0.0348)
-Rocket.Gravity = ori.Vector3(Sim.Gravity, 0, 0)
+Rocket = DOF6("Rocket")
+Rocket.Mass = 0.660
+Rocket.MMOI = Vector3(0.005, 0.0348, 0.0348)
+Rocket.Gravity = Vector3(Sim.Gravity, 0, 0)
 Rocket.Floor = True
 Rocket.setFromEulerAngles(0, 5, -10, "deg")
 
@@ -30,22 +30,22 @@ RocketApogee = 1.0 # Apogee for graph
 posLim = 1.0 # Limit for position graph
 
 # ------------------------- ORIENTATION PID -------------------------
-YPID = nav.PID(0.25, 0.0, 0.1)
+YPID = PID(0.25, 0.0, 0.1)
 YPID.Setpoint = 0.0
 
-ZPID = nav.PID(YPID.kP, YPID.kI, YPID.kD)
+ZPID = PID(YPID.kP, YPID.kI, YPID.kD)
 ZPID.Setpoint = 0.0
 
 # ------------------------- POSITION PID -------------------------
-Pos_YPID = nav.PID(10, 0.0, 10)
+Pos_YPID = PID(10, 0.0, 10)
 Pos_YPID.Setpoint = 0.0
 
-Pos_ZPID = nav.PID(Pos_YPID.kP, Pos_YPID.kI, Pos_YPID.kD)
-Pos_ZPID.Setpoint = 0.0
+Pos_ZPID = PID(Pos_YPID.kP, Pos_YPID.kI, Pos_YPID.kD)
+Pos_ZPID.Setpoint = 10.0
 
 # ------------------------- TVC OBJECTS -------------------------
-YTVC = nav.TVC(degToRad(5.0), 0.0, 0.3, degToRad(45.0))
-ZTVC = nav.TVC(YTVC.Max, 0.0, YTVC.Lever, YTVC.AngleSpeed)
+YTVC = TVC(degToRad(5.0), 0.0, 0.3, degToRad(45.0))
+ZTVC = TVC(YTVC.Max, 0.0, YTVC.Lever, YTVC.AngleSpeed)
 
 Rocket.Dataset.createData("YTVC")
 Rocket.Dataset.createData("ZTVC")
@@ -54,7 +54,9 @@ Rocket.Dataset.createData("YawSetpoint")
 Rocket.Dataset.createData("Apogee")
 
 # ---------------------------- MOTOR ----------------------------
-motor = ThrustCurve("Estes_E16.rse")
+# Motor = ThrustCurve("motor_files/Estes_E16.rse")
+Motor = ThrustCurve("motor_files/Estes_E12.rse")
+MotorThrust = 0.0
 
 while Sim.iterations <= Sim.Length/Sim.timeStep:
     '''
@@ -78,7 +80,10 @@ while Sim.iterations <= Sim.Length/Sim.timeStep:
     ZTVC.actuate(degToRad(RotatedTVC.y), Sim.timeStep)
 
     # ------------- PHYSICS --------------
-    MotorThrust = motor.getThrust(Sim.Time)
+    # if schedule(2, Sim.Length, Sim.Time):
+    #     MotorThrust = Motor.getThrust(Sim.Time-2)
+
+    MotorThrust = Motor.getThrust(Sim.Time)
 
     Rocket.addTorque(0, YTVC.getTorque(MotorThrust), ZTVC.getTorque(MotorThrust))
     Rocket.addForce(MotorThrust, 0, 0)
@@ -107,7 +112,7 @@ while Sim.iterations <= Sim.Length/Sim.timeStep:
 
 # ---------------------------- DATA PROCESSING ----------------------------
 Rocket.processData()
-# Rocket.Dataset.createFile("data_directory/FLIGHTLOGTEST_1.CSV")
+Rocket.Dataset.createFile("data_directory/FLIGHTLOGTEST_1.CSV")
 
 # --------------- FIGURE ONE --------------------------------- MATPLOTLIB PLOTTING ------------------------------
 time = Rocket.find("Time") # Find standard time
@@ -179,5 +184,18 @@ axPos3D.set_ylabel('Z Position')
 axPos3D.set_zlabel('X Position')
 # axPos3D.legend(loc="upper left")
 axPos3D.grid(True)
+
+# ------------------------------------------- FIGURE THREE -------------------------------------------
+figure_3, (axAcc) = plt.subplots(1, 1)
+figure_3.set_size_inches(6, 4)
+figure_3.suptitle(Rocket.Dataset.Name)
+
+axAcc.plot(time, Rocket.find("AccX"), label="AccX", color = 'red')
+axAcc.plot(time, Rocket.find("AccY"), label="AccY", color = 'green')
+axAcc.plot(time, Rocket.find("AccZ"), label="AccZ", color = 'blue')
+
+axAcc.set_title("Body Acceleration")
+axAcc.legend(loc="upper right")
+axAcc.grid(True)
 
 plt.show()

@@ -1,6 +1,7 @@
-from xml.dom import minidom;
+from xml.dom import minidom
 
 from scipy.interpolate import interp1d
+
 
 class ThrustCurve:
   def __init__(self, fileName):
