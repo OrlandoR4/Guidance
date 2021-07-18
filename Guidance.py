@@ -19,7 +19,8 @@ Sim.Gravity = -9.807
 
 # ------------------------- ROCKET BODY -------------------------
 Rocket = DOF6("Rocket")
-Rocket.Mass = 0.660
+Rocket.Mass = 0.612
+Rocket.DryMass = Rocket.Mass
 Rocket.MMOI = Vector3(0.005, 0.0348, 0.0348)
 Rocket.Gravity = Vector3(Sim.Gravity, 0, 0)
 Rocket.Floor = True
@@ -85,12 +86,13 @@ while Sim.iterations <= Sim.Length/Sim.timeStep:
 
     MotorThrust = Motor.getThrust(Sim.Time)
 
+    Rocket.Mass = Rocket.DryMass + Motor.getMass(Sim.Time)/1000.0
     Rocket.addTorque(0, YTVC.getTorque(MotorThrust), ZTVC.getTorque(MotorThrust))
     Rocket.addForce(MotorThrust, 0, 0)
 
     # ------------ UPDATE BODIES ----------
     Rocket.update(Sim.timeStep)
-
+    print(Rocket.Mass)
     # ------------- LOGGING --------------
     Rocket.addData("Time", Sim.Time)
     Rocket.addData("YTVC", radToDeg(-YTVC.Angle)) # Reversed to be compatible with real data (CHANGE)

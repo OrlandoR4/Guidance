@@ -30,6 +30,7 @@ class DOF6:
     '''
                           DOF6: 6 Degrees of Freedom object, simulates position, orientation, etc. of a rigid body
 
+        :DryMass: Constant mass for reference, wont get taken into account in force calculations
         :Mass: Mass of the body, kg
         :MMOI: Vector3 containing the Mass Moment Of Inertia at the center of mass of the body along its xyz axes, kg*m^2
         :Gravity: Vector3 containing the gravitational acceleration of the body, m/s^2
@@ -68,6 +69,7 @@ class DOF6:
     Name = ""
     Dataset = DataRecord("")
 
+    DryMass = 0.0
     Mass = 0.0
     MMOI = Vector3(0.0, 0.0, 0.0)
     Gravity = Vector3(0.0, 0.0, 0.0)
