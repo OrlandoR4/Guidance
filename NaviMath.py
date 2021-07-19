@@ -202,8 +202,8 @@ class FSF:
         self.integral += self.output #Output (sum of vector components) is integrated
         return (self.integral)
 
-    def changeSetpoint(self, setOri, setOriRate, setPos, setVel:
-        self.r = np.array(_r))
+    def changeSetpoint(self, setOri, setOriRate, setPos, setVel):
+        self.r = np.array([setOri, setOriRate, setPos, setVel])
 
     def reset(self):
         self.K = np.matrix([0, 0, 0, 0])
