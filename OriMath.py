@@ -180,12 +180,6 @@ class Quaternion:
 
         return self
 
-    def VectorRotate(self, x, y, z):
-        RotatedVector = Quaternion(0.0, x, y, z)
-        RotatedVector = self * RotatedVector * self.conjugate()
-
-        return Vector3(RotatedVector.x, RotatedVector.y, RotatedVector.z)
-
     def quaternionToEuler(self): # OUTPUT IN RADS
         # used to get out of function range, commenting untested, comment the following three lines, and comment out the lower one
         # asinClamp = ( 2.0 * (self.w * self.y - self.z * self.x) )
@@ -197,6 +191,12 @@ class Quaternion:
 
         return Vector3(roll, pitch, yaw) # Z-Yaw Y-Pitch X-Roll
 
+    def VectorRotate(self, x, y, z):
+        RotatedVector = Quaternion(0.0, x, y, z)
+        RotatedVector = self * RotatedVector * self.conjugate()
+
+        return Vector3(RotatedVector.x, RotatedVector.y, RotatedVector.z)
+
     def fromAxisAngle(self, theta, vx, vy, vz):
         sn = math.sin(theta / 2.0)
 
@@ -207,7 +207,7 @@ class Quaternion:
 
         return self
 
-    def IMU_ORI(self, x, y, z, dT):  # INPUT IN RADS
+    def IMU_ORI(self, x, y, z, dT): # INPUT IN RADS
         quatDelta = Quaternion(0, 0, 0, 0)
 
         angle = Vector3(x, y, z).getLength()

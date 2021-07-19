@@ -1,0 +1,46 @@
+<engine-database>
+  <engine-list>
+    <engine  mfg="Estes Industries, Inc." code="E12" Type="single-use" dia="24." len="95."
+initWt="59.9" propWt="35.9" delays="0,4,6,8" auto-calc-mass="1" auto-calc-cg="1"
+avgThrust="11.121" peakThrust="32.973" throatDia="0." exitDia="0." Itot="27.136"
+burn-time="2.44" massFrac="59.93" Isp="77.08" tDiv="10" tStep="-1." tFix="1"
+FDiv="10" FStep="-1." FFix="1" mDiv="10" mStep="-1." mFix="1" cgDiv="10"
+cgStep="-1." cgFix="1">
+    <comments>Based on NAR Published Data, 7/31/12, C. J. Kobel</comments>
+    <data>
+      <eng-data  t="0." f="0." m="35.9" cg="47.5"/>
+      <eng-data  t="0.052" f="5.045" m="35.7265" cg="47.5"/>
+      <eng-data  t="0.096" f="9.91" m="35.2912" cg="47.5"/>
+      <eng-data  t="0.196" f="24.144" m="33.0386" cg="47.5"/>
+      <eng-data  t="0.251" f="31.351" m="31.0196" cg="47.5"/>
+      <eng-data  t="0.287" f="32.973" m="29.4878" cg="47.5"/>
+      <eng-data  t="0.3" f="29.91" m="28.947" cg="47.5"/>
+      <eng-data  t="0.344" f="17.117" m="27.5783" cg="47.5"/>
+      <eng-data  t="0.37" f="14.414" m="27.036" cg="47.5"/>
+      <eng-data  t="0.4" f="12.973" m="26.4925" cg="47.5"/>
+      <eng-data  t="0.5" f="11.712" m="24.8597" cg="47.5"/>
+      <eng-data  t="0.6" f="11.171" m="23.346" cg="47.5"/>
+      <eng-data  t="0.7" f="10.631" m="21.9038" cg="47.5"/>
+      <eng-data  t="0.8" f="10.09" m="20.5332" cg="47.5"/>
+      <eng-data  t="0.9" f="9.73" m="19.2221" cg="47.5"/>
+      <eng-data  t="1." f="9.55" m="17.9467" cg="47.5"/>
+      <eng-data  t="1.101" f="9.91" m="16.6466" cg="47.5"/>
+      <eng-data  t="1.2" f="9.55" m="15.3722" cg="47.5"/>
+      <eng-data  t="1.3" f="9.73" m="14.0969" cg="47.5"/>
+      <eng-data  t="1.4" f="9.73" m="12.8097" cg="47.5"/>
+      <eng-data  t="1.5" f="9.73" m="11.5224" cg="47.5"/>
+      <eng-data  t="1.6" f="9.73" m="10.2352" cg="47.5"/>
+      <eng-data  t="1.7" f="9.55" m="8.95981" cg="47.5"/>
+      <eng-data  t="1.8" f="9.73" m="7.68447" cg="47.5"/>
+      <eng-data  t="1.9" f="9.73" m="6.39722" cg="47.5"/>
+      <eng-data  t="2." f="9.55" m="5.12188" cg="47.5"/>
+      <eng-data  t="2.1" f="9.55" m="3.85844" cg="47.5"/>
+      <eng-data  t="2.2" f="9.73" m="2.5831" cg="47.5"/>
+      <eng-data  t="2.3" f="9.19" m="1.33157" cg="47.5"/>
+      <eng-data  t="2.375" f="9.37" m="0.410782" cg="47.5"/>
+      <eng-data  t="2.4" f="5.95" m="0.157433" cg="47.5"/>
+      <eng-data  t="2.44" f="0." m="0." cg="47.5"/>
+    </data>
+  </engine>
+</engine-list>
+</engine-database>
