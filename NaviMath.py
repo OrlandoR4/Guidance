@@ -178,28 +178,39 @@ class FSF:
     #Literally your controller gains
     K = np.matrix([0, 0, 0, 0])
 
-    #Setpoints for each state
-    r = np.matrix([[0], #Ori
-                  [0], #OriRate
-                  [0], #Pos
-                  [0]]) #Vel
+    #Setpoints for each state (ori, oriRate, pos, posRate/velocity)
+    r = np.array([0, 0, 0, 0])
 
     previousOri = 0
     previousPos = 0
+
+    integral = 0
     output = 0.0
 
-    def __init__(self, sK):
-        self.K = sK
+    def __init__(self, _K):
+        self.K = _K
 
     def FSF(self, ori, pos, dt):
-        x = np.matrix([[ori],
-                       [(ori - self.previousOri) / dt],
-                       [pos],
-                       [(pos - self.previousPos) / dt]])
-        outputVector = x*self.K
-        outputVector -= self.r #Might wanna add a scaling factor here for steady state performance. A todo for sure
-        self.output = np.matrix.sum(outputVector) #Furthermore, the integrator is missing for now. Yet another todo
-        return (self.output)
+        x = np.matrix([[ori - self.r[0]],
+                       [((ori - self.previousOri) / dt) - self.r[1]],
+                       [pos - self.r[2]],
+                       [((pos - self.previousPos) / dt) - self.r[3]]])
+        outputVector = -self.K * x
+        self.output = np.sum(outputVector)
+        self.previousOri = ori
+        self.previousPos = pos
+        self.integral += self.output #Output (sum of vector components) is integrated
+        return (self.integral)
+
+    def changeSetpoint(self, setOri, setOriRate, setPos, setVel:
+        self.r = np.array(_r))
+
+    def reset(self):
+        self.K = np.matrix([0, 0, 0, 0])
+        self.output = 0
+        self.previousOri = 0
+        self.previousPos = 0
+        self.integral = 0
 
     
 class PID: # Proportional Integral Derivative controller, very easy to use and tune
