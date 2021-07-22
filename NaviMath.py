@@ -4,6 +4,7 @@ from DataUtility import Data, DataRecord
 
 from OriMath import Vector3, Quaternion
 from OriMath import radToDeg, degToRad, clamp
+import numpy as np
 
 
 def schedule(startTime, endTime, Time):
@@ -230,6 +231,45 @@ class Keyboard:
         self.RGB = aRGB # dont ask
 
 
+class FSF:
+    #Literally your controller gains
+    K = np.matrix([0, 0, 0, 0])
+
+    #Setpoints for each state (ori, oriRate, pos, posRate/velocity)
+    r = np.array([0, 0, 0, 0])
+
+    previousOri = 0
+    previousPos = 0
+
+    integral = 0
+    output = 0.0
+
+    def __init__(self, _K):
+        self.K = _K
+
+    def FSF(self, ori, pos, dt):
+        x = np.matrix([[ori - self.r[0]],
+                       [((ori - self.previousOri) / dt) - self.r[1]],
+                       [pos - self.r[2]],
+                       [((pos - self.previousPos) / dt) - self.r[3]]])
+        outputVector = -self.K * x
+        self.output = np.sum(outputVector)
+        self.previousOri = ori
+        self.previousPos = pos
+        self.integral += self.output #Output (sum of vector components) is integrated
+        return (self.integral)
+
+    def changeSetpoint(self, setOri, setOriRate, setPos, setVel):
+        self.r = np.array([setOri, setOriRate, setPos, setVel])
+
+    def reset(self):
+        self.K = np.matrix([0, 0, 0, 0])
+        self.output = 0
+        self.previousOri = 0
+        self.previousPos = 0
+        self.integral = 0
+
+    
 class PID:
     '''
                                  PID: Proportional Integral Derivative controller, very easy to use and tune
