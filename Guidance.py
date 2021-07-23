@@ -21,7 +21,7 @@ Sim.Gravity = -9.807
 Rocket = DOF6("Rocket")
 Rocket.Mass = 0.730
 Rocket.DryMass = Rocket.Mass
-Rocket.MMOI = Vector3(0.005, 0.045, 0.045)
+Rocket.MMOI = Vector3(0.005, 0.042, 0.042)
 Rocket.Gravity = Vector3(Sim.Gravity, 0, 0)
 Rocket.Floor = True
 Rocket.setFromEulerAngles(0, 5, -10, "deg")
@@ -31,7 +31,7 @@ RocketApogee = 1.0 # Apogee for graph
 posLim = 1.0 # Limit for position graph
 
 # ------------------------- ORIENTATION PID -------------------------
-YPID = PID(0.35, 0.0, 0.12)
+YPID = PID(0.30, 0.0, 0.12)
 YPID.Setpoint = 0.0
 
 ZPID = PID(YPID.kP, YPID.kI, YPID.kD)

@@ -232,10 +232,10 @@ class Keyboard:
 
 
 class FSF:
-    #Literally your controller gains
+    # Literally your controller gains
     K = np.matrix([0, 0, 0, 0])
 
-    #Setpoints for each state (ori, oriRate, pos, posRate/velocity)
+    # Setpoints for each state (ori, oriRate, pos, posRate/velocity)
     r = np.array([0, 0, 0, 0])
 
     previousOri = 0
@@ -256,8 +256,8 @@ class FSF:
         self.output = np.sum(outputVector)
         self.previousOri = ori
         self.previousPos = pos
-        self.integral += self.output #Output (sum of vector components) is integrated
-        return (self.integral)
+        self.integral += self.output # Output (sum of vector components) is integrated
+        return self.integral
 
     def changeSetpoint(self, setOri, setOriRate, setPos, setVel):
         self.r = np.array([setOri, setOriRate, setPos, setVel])
@@ -269,7 +269,7 @@ class FSF:
         self.previousPos = 0
         self.integral = 0
 
-    
+
 class PID:
     '''
                                  PID: Proportional Integral Derivative controller, very easy to use and tune
