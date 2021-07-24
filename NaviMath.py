@@ -232,10 +232,10 @@ class Keyboard:
 
 
 class FSF:
-    #Literally your controller gains
+    # Literally your controller gains
     K = np.matrix([0, 0, 0, 0])
 
-    #Setpoints for each state (ori, oriRate, pos, posRate/velocity)
+    # Setpoints for each state (ori, oriRate, pos, posRate/velocity)
     r = np.array([0, 0, 0, 0])
 
     previousOri = 0
@@ -254,9 +254,10 @@ class FSF:
                        [((pos - self.previousPos) / dt) - self.r[3]]])
         outputVector = -self.K * x
         self.output = np.sum(outputVector)
+        self.integral += self.output*0.001 #0.001 just seems to work really nicely
         self.previousOri = ori
         self.previousPos = pos
-        self.integral += self.output #Output (sum of vector components) is integrated
+        self.output += self.integral
         return (self.integral)
 
     def changeSetpoint(self, setOri, setOriRate, setPos, setVel):
