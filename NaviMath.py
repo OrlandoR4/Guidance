@@ -254,10 +254,11 @@ class FSF:
                        [((pos - self.previousPos) / dt) - self.r[3]]])
         outputVector = -self.K * x
         self.output = np.sum(outputVector)
+        self.integral += self.output*0.001 #0.001 just seems to work really nicely
         self.previousOri = ori
         self.previousPos = pos
-        self.integral += self.output # Output (sum of vector components) is integrated
-        return self.integral
+        self.output += self.integral
+        return (self.integral)
 
     def changeSetpoint(self, setOri, setOriRate, setPos, setVel):
         self.r = np.array([setOri, setOriRate, setPos, setVel])

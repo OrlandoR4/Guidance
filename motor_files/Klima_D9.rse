@@ -1,0 +1,35 @@
+<engine-database>
+  <engine-list>
+    <engine  mfg="Klima" code="D9" Type="single-use" dia="18." len="70." initWt="27.1"
+propWt="16.1" delays="0,3,5,7,0" auto-calc-mass="1" auto-calc-cg="1"
+avgThrust="8.904" peakThrust="25." throatDia="0." exitDia="0." Itot="19.962"
+burn-time="2.24" massFrac="59.41" Isp="126.43" tDiv="10" tStep="-1." tFix="1"
+FDiv="10" FStep="-1." FFix="1" mDiv="10" mStep="-1." mFix="1" cgDiv="10"
+cgStep="-1." cgFix="1">
+    <comments>Raketenmodellbau Klima GmbH
+Official manufacturer thrust data - D9
+Created by Leo Nutz for OpenRocket,
+released into the Public Domain (3/2014)
+
+Conversion in to .rse by Raketenmodellbau Klima / Floyd Wurster on 08/13/2014 for use in RockSim.</comments>
+    <data>
+      <eng-data  t="0." f="0." m="16.1" cg="35."/>
+      <eng-data  t="0.04" f="2.111" m="16.0659" cg="35."/>
+      <eng-data  t="0.116" f="9.685" m="15.7044" cg="35."/>
+      <eng-data  t="0.213" f="25." m="14.3477" cg="35."/>
+      <eng-data  t="0.286" f="15.738" m="13.1484" cg="35."/>
+      <eng-data  t="0.329" f="12.472" m="12.6592" cg="35."/>
+      <eng-data  t="0.369" f="10.67" m="12.2859" cg="35."/>
+      <eng-data  t="0.42" f="9.713" m="11.8667" cg="35."/>
+      <eng-data  t="0.495" f="9.178" m="11.2954" cg="35."/>
+      <eng-data  t="0.597" f="8.896" m="10.5519" cg="35."/>
+      <eng-data  t="1.711" f="8.925" m="2.54603" cg="35."/>
+      <eng-data  t="1.826" f="8.699" m="1.7287" cg="35."/>
+      <eng-data  t="1.917" f="8.052" m="1.11399" cg="35."/>
+      <eng-data  t="1.975" f="6.954" m="0.763006" cg="35."/>
+      <eng-data  t="2.206" f="1.07" m="0.0155338" cg="35."/>
+      <eng-data  t="2.242" f="0." m="0." cg="35."/>
+    </data>
+  </engine>
+</engine-list>
+</engine-database>
