@@ -91,6 +91,13 @@ class DOF6:
         self.Name = sName
 
         self.Dataset.Name = self.Name + "'s Data"
+
+        '''
+        datanames = ["Time", "PosX", "PosY", "PosZ", "VelX"]
+        for name in datanames:
+            self.Dataset.createData(name)
+        '''
+
         self.Dataset.createData("Time")
         self.Dataset.createData("PosX")
         self.Dataset.createData("PosY")
@@ -258,7 +265,7 @@ class FSF:
         self.previousOri = ori
         self.previousPos = pos
         self.output += self.integral
-        return (self.integral)
+        return self.integral
 
     def changeSetpoint(self, setOri, setOriRate, setPos, setVel):
         self.r = np.array([setOri, setOriRate, setPos, setVel])
@@ -322,7 +329,7 @@ class PID:
         PIDSpeed = self.SetpointRate * dt
         PIDError = clamp(PIDError, -PIDSpeed, PIDSpeed)
         self.Setpoint += PIDError
-        if timeStep <= 0.0 or self.SetpointRate <= 0:
+        if dt <= 0.0 or self.SetpointRate <= 0:
             self.Setpoint = target
 
     def reset(self):
