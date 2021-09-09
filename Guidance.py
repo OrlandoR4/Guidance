@@ -13,7 +13,7 @@ from ThrustCurve import ThrustCurve
 
 # ------------------------- SIMULATION -------------------------
 Sim = Simulation()
-Sim.Length = 10.0
+Sim.Length = 3.5
 Sim.timeStep = 0.05
 Sim.Gravity = -9.807
 
@@ -31,7 +31,7 @@ RocketApogee = 1.0 # Apogee for graph
 posLim = 1.0 # Limit for position graph
 
 # ------------------------- ORIENTATION PID -------------------------
-YPID = PID(0.30, 0.0, 0.12)
+YPID = PID(0.30, 0.2, 0.12)
 YPID.Setpoint = 0.0
 
 ZPID = PID(YPID.kP, YPID.kI, YPID.kD)
@@ -45,8 +45,8 @@ Pos_ZPID = PID(Pos_YPID.kP, Pos_YPID.kI, Pos_YPID.kD)
 Pos_ZPID.Setpoint = 10.0
 
 # ------------------------- TVC OBJECTS -------------------------
-YTVC = TVC(degToRad(5.0), 0.0, 0.3, degToRad(45.0))
-ZTVC = TVC(YTVC.Max, 0.0, YTVC.Lever, YTVC.AngleSpeed)
+YTVC = TVC(degToRad(5.0), degToRad(0.0), 0.3, degToRad(45.0))
+ZTVC = TVC(YTVC.Max, degToRad(0.0), YTVC.Lever, YTVC.AngleSpeed)
 
 Rocket.Dataset.createData("YTVC")
 Rocket.Dataset.createData("ZTVC")
