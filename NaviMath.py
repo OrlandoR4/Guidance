@@ -67,30 +67,27 @@ class DOF6:
         processData: Fills in zeroes for null data, function referenced from DataUtility
     '''
 
-    Name = ""
-    Dataset = DataRecord("")
-
-    DryMass = 0.0
-    Mass = 0.0
-    MMOI = Vector3(0.0, 0.0, 0.0)
-    Gravity = Vector3(0.0, 0.0, 0.0)
-    Floor = False
-
-    Acceleration = Vector3(0.0, 0.0, 0.0)
-    AngularAcceleration = Vector3(0.0, 0.0, 0.0)
-    AngularVelocity = Vector3(0.0, 0.0, 0.0)
-
-    Orientation = Quaternion(1.0, 0.0, 0.0, 0.0)
-    EulerAngles = Vector3(0.0, 0.0, 0.0)
-
-    GlobalAcceleration = Vector3(0.0, 0.0, 0.0)
-    Velocity = Vector3(0.0, 0.0, 0.0)
-    Position = Vector3(0.0, 0.0, 0.0)
-
     def __init__(self, sName):
-        self.Name = sName
+        self.Name = ""
 
-        self.Dataset.Name = self.Name + "'s Data"
+        self.DryMass = 0.0
+        self.Mass = 0.0
+        self.MMOI = Vector3(0.0, 0.0, 0.0)
+        self.Gravity = Vector3(0.0, 0.0, 0.0)
+        self.Floor = False
+
+        self.Acceleration = Vector3(0.0, 0.0, 0.0)
+        self.AngularAcceleration = Vector3(0.0, 0.0, 0.0)
+        self.AngularVelocity = Vector3(0.0, 0.0, 0.0)
+
+        self.Orientation = Quaternion(1.0, 0.0, 0.0, 0.0)
+        self.EulerAngles = Vector3(0.0, 0.0, 0.0)
+
+        self.GlobalAcceleration = Vector3(0.0, 0.0, 0.0)
+        self.Velocity = Vector3(0.0, 0.0, 0.0)
+        self.Position = Vector3(0.0, 0.0, 0.0)
+
+        self.Dataset = DataRecord(sName)
 
         '''
         datanames = ["Time", "PosX", "PosY", "PosZ", "VelX"]
@@ -189,13 +186,13 @@ class DOF6:
     # You can directly call the Dataset property of DOF6, but these functions will make the code much cleaner, the same functions can be used for the Dataset object
 
     def addData(self, NameToFind, data):
-        return self.Dataset.addData(NameToFind, data)
+        self.Dataset.addData(NameToFind, data)
 
     def find(self, NameToFind):
         return self.Dataset.find(NameToFind)
 
     def processData(self):
-        return self.Dataset.processData()
+        self.Dataset.processData()
 
 
 class Simulation:
@@ -210,12 +207,12 @@ class Simulation:
 
         update: Advances simulation in time
     '''
-
-    Length = 0.0
-    Gravity = 9.807
-    Time = 0.0
-    timeStep = 0.0
-    iterations = 0
+    def __init__(self):
+        self.Length = 0.0
+        self.Gravity = 9.807
+        self.Time = 0.0
+        self.timeStep = 0.0
+        self.iterations = 0
 
     def update(self):
         self.iterations += 1
@@ -223,6 +220,7 @@ class Simulation:
         print(self.iterations, self.Time, self.timeStep)
 
 
+'''
 class Keyboard:
     Brand = ""
     Model = ""
@@ -236,6 +234,7 @@ class Keyboard:
         self.Keys = aKeys
         self.Color = aColor
         self.RGB = aRGB # dont ask
+'''
 
 
 class FSF:
@@ -294,23 +293,20 @@ class PID:
         changeSetpoint: Function to change the setpoint gradually, target is the setpoint to change to, dt is delta time.
         reset: Resets PID values
     '''
-    kP = 0.0
-    kI = 0.0
-    kD = 0.0
-    Setpoint = 0.0
-    SetpointRate = 0.0
-
-    Error = 0
-    previousError = 0
-    P = 0.0
-    I = 0.0
-    D = 0.0
-    output = 0.0
-
     def __init__(self, skP, skI, skD):
         self.kP = skP
         self.kI = skI
         self.kD = skD
+
+        self.Setpoint = 0.0
+        self.SetpointRate = 0.0
+
+        self.Error = 0
+        self.previousError = 0
+        self.P = 0.0
+        self.I = 0.0
+        self.D = 0.0
+        self.output = 0.0
 
     def PID(self, Input, dt):
         self.Error = self.Setpoint - Input
@@ -358,21 +354,15 @@ class TVC:
         actuate: Actuate the TVC given a target (where to point the TVC at), and dt, time step, change in time, delta time
         getTorque: Returns the torque created from the TVC given a thrust, N*m
     '''
-
-    Max = 0.0
-    Offset = 0.0
-    Lever = 0.0
-    AngleSpeed = 0.0
-
-    Angle = 0.0
-    SideForce = 0.0
-    Torque = 0.0
-
     def __init__(self, sMax, sOffset, sLever, sAngleSpeed):
         self.Max = sMax
         self.Offset = sOffset
         self.Lever = sLever
         self.AngleSpeed = sAngleSpeed
+
+        self.Angle = 0.0
+        self.SideForce = 0.0
+        self.Torque = 0.0
 
     def actuate(self, target, dt):
         TVCError = target - self.Angle
@@ -389,13 +379,12 @@ class TVC:
 
 
 class LowPass: # Dont use, untested, low pass filter
-    highGain = 0.0
-    lowGain = 0.0
-    filterOut = 0.0
-    filterOld = 0.0
-
     def __init__(self, AhighGain):
         self.highGain = AhighGain
+
+        self.lowGain = 0.0
+        self.filterOut = 0.0
+        self.filterOld = 0.0
 
     def Pass(self, Input):
         self.lowGain = 1.0 - self.highGain

@@ -36,10 +36,6 @@ def rotate(x, y, theta): # Rotates a 2D vector by an angle theta, returns a Vect
 
 
 class Vector3:
-    x = 0.0
-    y = 0.0
-    z = 0.0
-
     def __init__(self, x, y, z):
         self.x = x
         self.y = y
@@ -126,12 +122,7 @@ class Vector3:
 
 
 class Quaternion:
-    w = 1.0
-    x = 0.0
-    y = 0.0
-    z = 0.0
-
-    def __init__(self, w, x, y, z):
+    def __init__(self, w = 1.0, x = 0.0, y = 0.0, z = 0.0):
         self.w = w
         self.x = x
         self.y = y

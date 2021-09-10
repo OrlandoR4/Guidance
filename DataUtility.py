@@ -1,27 +1,20 @@
 
 
 class Data:
-    Name = "" # Name of the data being stored
-    Index = 0 # Index of the data, used by the DataRecord class
-    Datas = [] # List to store the data
-
-    def __init__(self, sName, sIndex, sDatas):
+    def __init__(self, sName, sIndex):
         self.Name = sName
         self.Index = sIndex
-        self.Datas = sDatas
+        self.Datas = []
 
 
 class DataRecord: # Stores multiple data objects, a dataset
-    Name = "" # Name of the dataset
-    DataObjects = [Data] # List of data objects
-    Indexes = 0 # Number of data objects that the datarecord stores
-
     def __init__(self, sName):
-        self.name = sName
-        self.DataObjects = []
+        self.Name = sName  # Name of the dataset
+        self.DataObjects = []  # List of data objects
+        self.Indexes = 0  # Number of data objects that the datarecord stores
 
     def createData(self, Name): # Creates a data object to store data to
-        self.DataObjects.append(Data(Name, self.Indexes, []))
+        self.DataObjects.append(Data(Name, self.Indexes))
         self.Indexes += 1
 
     def addData(self, NameToFind, data): # Adds data to a data object within the datarecord
