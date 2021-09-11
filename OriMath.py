@@ -220,7 +220,7 @@ class Quaternion:
         target = Vector3(x, y, z).normalize()
         target = self.conjugate().VectorRotate(target.x, target.y, target.z)
 
-        y_out = math.atan2(target.z, target.x)
-        z_out = math.atan2(-target.y, target.x)
+        y_out = math.atan2(-target.z, target.x)
+        z_out = math.atan2(target.y, target.x)
 
         return Vector3(0.0, y_out, z_out)

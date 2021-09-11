@@ -24,7 +24,7 @@ Rocket.DryMass = Rocket.Mass
 Rocket.MMOI = Vector3(0.005, 0.042, 0.042)
 Rocket.Gravity = Vector3(Sim.Gravity, 0, 0)
 Rocket.Floor = False
-Rocket.setFromEulerAngles(0, 5, -10, "deg")
+Rocket.setFromEulerAngles(0, 0, 0, "deg")
 
 # DATA TESTING
 RocketApogee = 10.0 # Apogee for graph
@@ -72,7 +72,7 @@ while Sim.iterations <= Sim.Length/Sim.timeStep:
                         THE TVC WORKS IN RADIANS, BUT IS LOGGED AS DEGREES IN THIS EXAMPLE
                EULER ANGLES ARE LOGGED AS DEGREES BY DEFAULT, CHECK DOF6 IN NAVIMATH FOR MORE INFO
     '''
-    targetVector = Rocket.Orientation.getVectorGuidance(-1.0, 0.0, 1.0)
+    targetVector = Rocket.Orientation.getVectorGuidance(0.0, 1.0, 0.0)
     targetVector_body.addData("x", radToDeg(targetVector.x))
     targetVector_body.addData("y", radToDeg(targetVector.y))
     targetVector_body.addData("z", radToDeg(targetVector.z))
@@ -81,8 +81,8 @@ while Sim.iterations <= Sim.Length/Sim.timeStep:
     YPID.PID(radToDeg(targetVector.y), Sim.timeStep)
     ZPID.PID(radToDeg(targetVector.z), Sim.timeStep)
 
-    YTVC.actuate(degToRad(YPID.output), Sim.timeStep)
-    ZTVC.actuate(degToRad(ZPID.output), Sim.timeStep)
+    YTVC.actuate(-degToRad(YPID.output), Sim.timeStep)
+    ZTVC.actuate(-degToRad(ZPID.output), Sim.timeStep)
 
     # ------------- PHYSICS --------------
     # if schedule(2, Sim.Length, Sim.Time):
