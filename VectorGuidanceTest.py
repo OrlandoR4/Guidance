@@ -23,7 +23,7 @@ Rocket.Mass = 0.730
 Rocket.DryMass = Rocket.Mass
 Rocket.MMOI = Vector3(0.005, 0.042, 0.042)
 Rocket.Gravity = Vector3(Sim.Gravity, 0, 0)
-Rocket.Floor = False
+Rocket.Floor = True
 Rocket.setFromEulerAngles(0, 20, 10, "deg")
 
 # DATA TESTING
@@ -59,10 +59,6 @@ Motor = ThrustCurve("motor_files/Estes_F15.rse")
 MotorThrust = 0.0
 
 # ---------------------------- TEST -----------------------------
-targetVector_body = DataRecord("targetVector_body")
-targetVector_body.createData("x")
-targetVector_body.createData("y")
-targetVector_body.createData("z")
 
 while Sim.iterations <= Sim.Length/Sim.timeStep:
     '''
@@ -73,9 +69,6 @@ while Sim.iterations <= Sim.Length/Sim.timeStep:
                EULER ANGLES ARE LOGGED AS DEGREES BY DEFAULT, CHECK DOF6 IN NAVIMATH FOR MORE INFO
     '''
     targetVector = Rocket.Orientation.getVectorGuidance(1.0, 0.0, 0.0)
-    targetVector_body.addData("x", radToDeg(targetVector.x))
-    targetVector_body.addData("y", radToDeg(targetVector.y))
-    targetVector_body.addData("z", radToDeg(targetVector.z))
 
     # ------------- CONTROL --------------
     YPID.PID(radToDeg(targetVector.y), Sim.timeStep)
@@ -145,13 +138,11 @@ axCon.legend(loc="upper right")
 axCon.grid(True)
 
 axPos.plot(time, Rocket.find("PosX"), label="PosX", color = 'red')
-axPos2 = axPos.twinx()
-axPos2.plot(time, Rocket.find("PosY"), label="PosY", color = 'green')
-axPos2.plot(time, Rocket.find("PosZ"), label="PosZ", color = 'blue')
+axPos.plot(time, Rocket.find("PosY"), label="PosY", color = 'green')
+axPos.plot(time, Rocket.find("PosZ"), label="PosZ", color = 'blue')
 
 axPos.set_title("Position")
-axPos.legend(loc="lower left")
-axPos2.legend(loc="lower right")
+axPos.legend(loc="upper left")
 axPos.grid(True)
 
 axVel.plot(time, Rocket.find("VelX"), label="VelX", color = 'red')
@@ -202,17 +193,5 @@ axAcc.plot(time, Rocket.find("AccZ"), label="AccZ", color = 'blue')
 axAcc.set_title("Body Acceleration")
 axAcc.legend(loc="upper right")
 axAcc.grid(True)
-
-# ------------------------------------------- FIGURE FOUR -------------------------------------------
-figure_4, (axTest) = plt.subplots(1, 1)
-figure_4.set_size_inches(6, 4)
-
-axTest.plot(time, targetVector_body.find("x"), label="targetbody_x", color = 'red')
-axTest.plot(time, targetVector_body.find("y"), label="targetbody_y", color = 'green')
-axTest.plot(time, targetVector_body.find("z"), label="targetbody_z", color = 'blue')
-
-axTest.set_title("Testing, Target_LOS_body_angle_deg")
-axTest.legend(loc="upper right")
-axTest.grid(True)
 
 plt.show()

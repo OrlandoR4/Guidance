@@ -80,19 +80,42 @@ class Vector3:
         return Vector3(x, y, z)
 
     def normalize(self):
+        """
+           Normalizes vector (scales vector so its length is 1)
+
+           :return: this normalized vector
+           :rtype: Vector3
+       """
+
         norm = math.sqrt(self.x * self.x + self.y * self.y + self.z * self.z)
-        self.x = self.x / norm
-        self.y = self.y / norm
-        self.z = self.z / norm
+        if norm > 0:
+            self.x = self.x / norm
+            self.y = self.y / norm
+            self.z = self.z / norm
 
         return self
 
     def getLength(self):
+        """
+           Returns the length of the vector
+
+           :return: length of the vector
+           :rtype: float
+       """
+
         norm = math.sqrt(self.x * self.x + self.y * self.y + self.z * self.z)
 
         return norm
 
     def dotProduct(self, other):
+        """
+           Calculates dot product of two vectors
+
+           :param Vector3 other: input vector to calculate dot product with
+           :return: dot product of this vector and vector input
+           :rtype: float or int
+        """
+
         x = self.x * other.x
         y = self.y * other.y
         z = self.z * other.z
@@ -100,6 +123,13 @@ class Vector3:
         return x + y + z
 
     def crossProduct(self, other):
+        """
+           Calculates cross product of two vectors
+
+           :param Vector3 other: input vector to calculate dot product with
+           :return: cross product of this vector and vector input (this_vector x input_vector)
+           :rtype: Vector3
+        """
         x = self.y * other.z - self.z * other.y
         y = -(self.x * other.z - self.z * other.x)
         z = self.x * other.y - self.y * other.x
@@ -107,6 +137,13 @@ class Vector3:
         return Vector3(x, y, z)
 
     def radToDeg(self):
+        """
+           Converts vector from radian to degree units
+
+           :return: this vector after conversion
+           :rtype: Vector3
+        """
+
         self.x = self.x * 180.0 / 3.14159
         self.y = self.y * 180.0 / 3.14159
         self.z = self.z * 180.0 / 3.14159
@@ -114,6 +151,13 @@ class Vector3:
         return self
 
     def degToRad(self):
+        """
+           Converts vector from radian to degree units
+
+           :return: this vector after conversion
+           :rtype: Vector3
+        """
+
         self.x = self.x / 180.0 * 3.14159
         self.y = self.y / 180.0 * 3.14159
         self.z = self.z / 180.0 * 3.14159
@@ -188,7 +232,7 @@ class Quaternion:
 
         return Vector3(RotatedVector.x, RotatedVector.y, RotatedVector.z)
 
-    def fromAxisAngle(self, theta, vx, vy, vz):
+    def fromAxisAngle(self, vx, vy, vz):
         sn = math.sin(theta / 2.0)
 
         self.w = math.cos(theta / 2.0)
